@@ -1,0 +1,65 @@
+.skin-default h1 {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.skin-default section:not(:first-child) {
+  border-top: 1px solid lightgray;
+}
+
+.skin-default .empty-query-placeholder {
+  padding: 5px;
+  font-size: 15px;
+}
+
+.skin-default section {
+  padding: 5px;
+  white-space: nowrap;
+  clear: both;
+  overflow: hidden;
+}
+
+.skin-default #chain-holder {
+  width: 400px;
+  border-top: 1px solid lightgray;
+}
+
+.skin-default .chain .control-box {
+  float: right;
+}
+
+.skin-default .chain .label {
+  white-space: normal;
+  font-size: 15px;
+  float: left;
+  max-width: 300px;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}
+
+.skin-default .chain:last-child .control-box .btn-play {
+  opacity: 0.15;
+  cursor: not-allowed;
+}
+
+.skin-default button.control {
+  padding: 6px;
+}
+
+.skin-default .btn-play:before {
+  content: '\25BA';
+}
+
+.skin-default .btn-pause:before {
+  content: '\2590\A0\258C';
+}
+
+.skin-default .btn-remove:before {
+  content: '\2716';
+}
+
+.skin-default .control-box:before {
+  content: '';
+  margin: 0 8px;
+  border-left: 1px solid lightgray;
+}

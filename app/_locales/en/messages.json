@@ -1,0 +1,38 @@
+{
+  "appName": {
+    "message": "One Sound",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "One sound for all media content",
+    "description": "The description of the application"
+  },
+  "empty_music_query": {
+    "message": "There is no music in query for now ...",
+    "description": "Message when music query is empty"
+  },
+  "music_chain_title": {
+    "message": "Music Chain",
+    "description": "Music chain title"
+  },
+  "skin_option_label": {
+    "message": "Skin",
+    "description": "Label for skin (on options.html page)"
+  },
+  "skin_default_option_value": {
+    "message": "default",
+    "description": "Value for default skin value (on options.html page)"
+  },
+  "skin_pinky_option_value": {
+    "message": "pinky",
+    "description": "Value for pinky skin value (on options.html page)"
+  },
+  "options_save_button_label": {
+    "message": "Save",
+    "description": "Label for save options button (on options.html page)"
+  },
+  "options_saved": {
+    "message": "Options saved.",
+    "description": "Message appears when extension options are saved (on options.html page)"
+  }
+}
