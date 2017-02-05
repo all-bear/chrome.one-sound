@@ -1,7 +1,7 @@
 import {Adapter} from '../adapter';
 
 const TYPE = 'html5';
-class Html5AdapterRepository {
+export class Html5AdapterRepository {
   htmlCollectionToArray(collection) {
     return [].map.call(collection, function (el) {
       return el;
@@ -59,5 +59,3 @@ class Html5AdapterRepository {
     });
   }
 }
-
-export let html5AdapterRepository = new Html5AdapterRepository();

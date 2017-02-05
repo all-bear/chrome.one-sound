@@ -1,13 +1,14 @@
 /* global window */
 
 import {transport} from './transport';
+import {UniqId} from './helper/uniq-id';
 
 export class Adapter {
   constructor(data) {
     this.transport = transport;
 
     this.type = data.type;
-    this.id = Adapter.getUniqueId(data.type);
+    this.id = UniqId.generate(data.type);
     this.behavior = data.behavior;
     this.state = this.stateObj;
   }
@@ -31,22 +32,6 @@ export class Adapter {
       label: this.behavior.getLabel(),
       isPlayed: this.behavior.isPlayed()
     };
-  }
-
-  // TODO use lib for this
-  static getUniqueId(prefix) {
-    if (!prefix) {
-      prefix = '';
-    }
-
-    const s4 = () => {
-      return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
-    };
-
-    return prefix + s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-      s4() + '-' + s4() + s4() + s4();
   }
 
   register() {

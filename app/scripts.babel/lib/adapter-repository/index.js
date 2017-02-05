@@ -1,9 +1,11 @@
-import {html5AdapterRepository} from './html5';
+import {Html5AdapterRepository} from './html5';
+import {YandexMusicAdapterRepository} from './yandex-music';
 
 class AdapterRepository {
   constructor () {
     this.repositories = [
-      html5AdapterRepository
+      new Html5AdapterRepository(),
+      new YandexMusicAdapterRepository()
     ];
   }
 
