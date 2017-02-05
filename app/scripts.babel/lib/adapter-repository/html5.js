@@ -1,5 +1,53 @@
 import {Adapter} from '../adapter';
 
+export class Html5AdapterBehaviour {
+  constructor(element) {
+    this.element = element;
+    this.isPlayTriggeredProgrammatically = false;
+    this.isPauseTriggeredProgrammatically = false;
+  }
+
+  get label() {
+    return document.location.href;
+  }
+
+  play() {
+    this.isPlayTriggeredProgrammatically = true;
+    this.element.play();
+  }
+
+  pause() {
+    this.isPauseTriggeredProgrammatically = true;
+    this.element.pause();
+  }
+
+  get isPlayed() {
+    return !this.element.paused;
+  }
+
+  registerChangeListener(cb) {
+    this.element.addEventListener('play', () => {
+      if (this.isPlayTriggeredProgrammatically) {
+        this.isPlayTriggeredProgrammatically = false;
+
+        return;
+      }
+
+      cb.call();
+    });
+    this.element.addEventListener('pause', () => {
+      if (this.isPauseTriggeredProgrammatically) {
+        this.isPauseTriggeredProgrammatically = false;
+
+        return;
+      }
+
+      cb.call();
+    });
+    this.element.addEventListener('loadstart', cb);
+  }
+}
+
 const TYPE = 'html5';
 export class Html5AdapterRepository {
   htmlCollectionToArray(collection) {
@@ -17,43 +65,9 @@ export class Html5AdapterRepository {
   get adapters() {
     return new Promise((resolve, reject) => {
       resolve(this.playerDomElements.map(el => {
-        let isPlayTriggeredProgrammatically = false;
-        let isPauseTriggeredProgrammatically = false;
-
         return new Adapter({
           type: TYPE,
-          behavior: {
-            getLabel: () => document.location.href,
-            play: () => {
-              isPlayTriggeredProgrammatically = true;
-              el.play();
-            },
-            pause: () => {
-              isPauseTriggeredProgrammatically = true;
-              el.pause();
-            },
-            isPlayed: () => !el.paused,
-            registerChangeListener: cb => {
-              el.addEventListener('play', () => {
-                if (isPlayTriggeredProgrammatically) {
-                  isPlayTriggeredProgrammatically = false;
-
-                  return;
-                }
-
-                cb.call();
-              });
-              el.addEventListener('pause', () => {
-                if (isPauseTriggeredProgrammatically) {
-                  isPauseTriggeredProgrammatically = false;
-
-                  return;
-                }
-
-                cb.call();
-              });
-            }
-          }
+          behavior: new Html5AdapterBehaviour(el)
         });
       }));
     });

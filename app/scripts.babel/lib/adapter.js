@@ -15,7 +15,7 @@ export class Adapter {
 
   updateState(action) {
     if (action) {
-      action.call();
+      action();
     }
 
     this.state = this.stateObj;
@@ -29,16 +29,16 @@ export class Adapter {
     return {
       type: this.type,
       id: this.id,
-      label: this.behavior.getLabel(),
-      isPlayed: this.behavior.isPlayed()
+      label: this.behavior.label,
+      isPlayed: this.behavior.isPlayed
     };
   }
 
   register() {
     this.behavior.registerChangeListener(() => {
-      if (this.behavior.isPlayed() != this.state.isPlayed) {
+      if (this.behavior.isPlayed != this.state.isPlayed) {
         this.transport.send(
-          this.behavior.isPlayed() ? 'add-adapter' : 'remove-adapter',
+          this.behavior.isPlayed ? 'add-adapter' : 'remove-adapter',
           this
         );
       } else {
@@ -56,7 +56,7 @@ export class Adapter {
         return;
       }
 
-      this.updateState(this.behavior.play);
+      this.updateState(this.behavior.play.bind(this.behavior));
     });
 
     this.transport.on('pause-adapter', adapter => {
@@ -64,7 +64,7 @@ export class Adapter {
         return;
       }
 
-      this.updateState(this.behavior.pause);
+      this.updateState(this.behavior.pause.bind(this.behavior));
     });
   }
 

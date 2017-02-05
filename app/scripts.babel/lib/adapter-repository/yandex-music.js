@@ -20,7 +20,7 @@ class YandexExternalApi {
         return;
       }
 
-      if (event.data.type && event.data.type == EVENT_TYPE && event.data.id == eventId) {
+      if (event.data.id == eventId) {
         cb.call();
       }
     }, false);
@@ -81,8 +81,37 @@ class YandexExternalApi {
     ScriptInjection.execute(`externalAPI.togglePause(${status})`);
   }
 
-  isPlaying() {
+  get isPlaying() {
     return ScriptInjection.execute('externalAPI.isPlaying()') === 'true';
+  }
+}
+
+class YandexMusicAdapterBehaviour {
+  constructor(api) {
+    this.api = api;
+  }
+
+  get label() {
+    const trackInfo = this.api.currentTrack;
+
+    return trackInfo ?  trackInfo.artists[0].title + ' - ' + trackInfo.title : '';
+  }
+
+  play() {
+    this.api.togglePause(false);
+  }
+
+  pause() {
+    this.api.togglePause(true);
+  }
+
+  get isPlayed() {
+    return this.api.isPlaying
+  }
+
+  registerChangeListener(cb) {
+    this.api.addStateEventListener(cb);
+    this.api.addTrackEventListener(cb);
   }
 }
 
@@ -92,37 +121,15 @@ export class YandexMusicAdapterRepository {
   get adapters() {
     return new Promise((resolve, reject) => {
       if (location.hostname !== LOCATION) {
-        resolve([]);
+        return resolve([]);
       }
 
-
-      resolve([(() => {
-        const api = new YandexExternalApi();
-
-        return new Adapter({
+      resolve([
+        new Adapter({
           type: TYPE,
-          behavior: {
-            getLabel: () => {
-              const trackInfo = api.currentTrack;
-
-              return trackInfo ?  trackInfo.artists[0].title + ' - ' + trackInfo.title : '';
-            },
-            play: () => {
-              api.togglePause(false);
-            },
-            pause: () => {
-              api.togglePause(true);
-            },
-            isPlayed: () => {
-              return api.isPlaying();
-            },
-            registerChangeListener: cb => {
-              api.addStateEventListener(cb);
-              api.addTrackEventListener(cb);
-            }
-          }
-        });
-      })()]);
+          behavior: new YandexMusicAdapterBehaviour(new YandexExternalApi())
+        })
+      ]);
     });
   }
 }

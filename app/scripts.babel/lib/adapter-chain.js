@@ -17,12 +17,20 @@ class Chain {
     return this.chain.length;
   }
 
+  find(id) {
+    return this.chain.find(adapter => adapter.id === id);
+  }
+
   has(adapter) {
     return this.chain.some(chainAdapter => chainAdapter.id === adapter.id);
   }
 
   remove(adapter) {
     this.chain = this.chain.filter(chainAdapter => chainAdapter.id !== adapter.id);
+  }
+
+  update(adapter) {
+    this.find(adapter.id).label = adapter.label;
   }
 
   get last() {
@@ -60,6 +68,10 @@ class AdapterChain {
 
       this.play(adapter);
       this.chain.push(adapter);
+    });
+
+    this.transport.on('update-adapter', adapter => {
+      this.chain.update(adapter);
     });
 
     this.transport.on('remove-adapter', adapter => { // TODO move to constants

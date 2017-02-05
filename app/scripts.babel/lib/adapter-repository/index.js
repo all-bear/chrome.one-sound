@@ -1,11 +1,13 @@
 import {Html5AdapterRepository} from './html5';
 import {YandexMusicAdapterRepository} from './yandex-music';
+import {VkAdapterRepository} from './vk';
 
 class AdapterRepository {
   constructor () {
     this.repositories = [
       new Html5AdapterRepository(),
-      new YandexMusicAdapterRepository()
+      new YandexMusicAdapterRepository(),
+      new VkAdapterRepository()
     ];
   }
 
