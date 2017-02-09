@@ -16,6 +16,8 @@ class AdapterChainUi {
 
     this.reloadChain();
     this.initSkin();
+
+    this.transport.on('update-adapter', this.reloadChain.bind(this));
   }
 
   initSkin() {
@@ -34,38 +36,40 @@ class AdapterChainUi {
     return template;
   }
 
-  reloadChain() {
-    this.transport.send('get-chain', {}, false, chain => {
-      let template = '';
+  renderChain(chain) {
+    let template = '';
 
-      if (chain.length) {
-        chain.forEach(adapter => {
-          template += AdapterChainUi.renderAdapter(adapter);
-        });
-      } else {
-        template = this.placeholder;
-      }
-
-      this.holder.innerHTML = template;
-
-      this.holder.querySelectorAll('[data-role="remove"]').forEach(btn => {
-        var adapterId = btn.getAttribute('data-id'),
-          adapter = chain.find(adapter => adapterId === adapter.id);
-
-        btn.onclick = function () {
-          transport.send('remove-adapter', adapter);
-        };
+    if (chain.length) {
+      chain.forEach(adapter => {
+        template += AdapterChainUi.renderAdapter(adapter);
       });
+    } else {
+      template = this.placeholder;
+    }
 
-      this.holder.querySelectorAll('[data-role="play"]').forEach(btn => {
-        var adapterId = btn.getAttribute('data-id'),
-          adapter = chain.find(adapter => adapterId === adapter.id);
+    this.holder.innerHTML = template;
 
-        btn.onclick = function () {
-          transport.send('add-adapter', adapter)
-        };
-      });
+    this.holder.querySelectorAll('[data-role="remove"]').forEach(btn => {
+      var adapterId = btn.getAttribute('data-id'),
+        adapter = chain.find(adapter => adapterId === adapter.id);
+
+      btn.onclick = () => {
+        transport.send('remove-adapter', adapter, false, this.reloadChain.bind(this));
+      };
     });
+
+    this.holder.querySelectorAll('[data-role="play"]').forEach(btn => {
+      var adapterId = btn.getAttribute('data-id'),
+        adapter = chain.find(adapter => adapterId === adapter.id);
+
+      btn.onclick = () => {
+        transport.send('add-adapter', adapter, false, this.reloadChain.bind(this));
+      };
+    });
+  }
+
+  reloadChain() {
+    this.transport.send('get-chain', {}, false, this.renderChain.bind(this));
   }
 }
 

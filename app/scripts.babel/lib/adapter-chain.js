@@ -30,7 +30,10 @@ class Chain {
   }
 
   update(adapter) {
-    this.find(adapter.id).label = adapter.label;
+    const chainAdapter = this.find(adapter.id);
+    if (chainAdapter) {
+      chainAdapter.label = adapter.label;
+    }
   }
 
   get last() {
@@ -49,11 +52,15 @@ class AdapterChain {
   }
 
   pause(adapter) {
-    this.transport.send('pause-adapter', adapter, true, () => {});
+    this.transport.send('pause-adapter', adapter, true);
   }
 
   play(adapter) {
-    this.transport.send('play-adapter', adapter, true, () => {});
+    this.transport.send('play-adapter', adapter, true);
+  }
+
+  triggerChainChange() {
+    this.transport.send('chain-changed', this.chain.chain, true);
   }
 
   init() {
@@ -68,10 +75,12 @@ class AdapterChain {
 
       this.play(adapter);
       this.chain.push(adapter);
+      this.triggerChainChange();
     });
 
     this.transport.on('update-adapter', adapter => {
       this.chain.update(adapter);
+      this.triggerChainChange();
     });
 
     this.transport.on('remove-adapter', adapter => { // TODO move to constants
@@ -81,10 +90,11 @@ class AdapterChain {
       } else {
         this.chain.remove(adapter);
       }
+      this.triggerChainChange();
     });
 
-    this.transport.on('get-chain', (data, senderCb) => {
-      senderCb(this.chain.chain);
+    this.transport.on('get-chain', (data, cb) => {
+      cb(this.chain.chain);
     });
   }
 }

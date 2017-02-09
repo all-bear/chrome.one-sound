@@ -9,10 +9,6 @@ class Transport {
     }
   }
 
-  isContentScript() {
-    return typeof chrome.tabs === 'undefined';
-  }
-
   sendToBackground(code, data, cb) {
     chrome.runtime.sendMessage({code, data}, cb);
   }

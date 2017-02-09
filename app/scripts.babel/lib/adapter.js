@@ -11,6 +11,7 @@ export class Adapter {
     this.id = UniqId.generate(data.type);
     this.behavior = data.behavior;
     this.state = this.stateObj;
+    this.destroed = false;
   }
 
   updateState(action) {
@@ -35,7 +36,19 @@ export class Adapter {
   }
 
   register() {
+    if (this.destroed) {
+      return;
+    }
+
+    if (this.behavior.isPlayed) {
+      this.transport.send('add-adapter', this);
+    }
+
     this.behavior.registerChangeListener(() => {
+      if (this.destroed) {
+        return;
+      }
+
       if (this.behavior.isPlayed != this.state.isPlayed) {
         this.transport.send(
           this.behavior.isPlayed ? 'add-adapter' : 'remove-adapter',
@@ -52,6 +65,10 @@ export class Adapter {
     });
 
     this.transport.on('play-adapter', adapter => {
+      if (this.destroed) {
+        return;
+      }
+
       if (adapter.id !== this.id) {
         return;
       }
@@ -60,6 +77,10 @@ export class Adapter {
     });
 
     this.transport.on('pause-adapter', adapter => {
+      if (this.destroed) {
+        return;
+      }
+
       if (adapter.id !== this.id) {
         return;
       }
@@ -70,5 +91,6 @@ export class Adapter {
 
   destroy() {
     this.transport.send('remove-adapter', this);
+    this.destroed = true;
   }
 }

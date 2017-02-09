@@ -1,6 +1,7 @@
 import {Adapter} from '../adapter';
 import {ScriptInjection} from '../helper/script-injection';
 import {Html5AdapterBehaviour} from './html5';
+import {AbstractAdapterRepository} from './abstract';
 
 class VkExternalApi {
   get audioElement() {
@@ -29,14 +30,13 @@ class VkAdapterBehaviour extends Html5AdapterBehaviour {
 }
 
 const TYPE = 'vk';
-const LOCATION = 'vk.com';
-export class VkAdapterRepository {
+export class VkAdapterRepository extends AbstractAdapterRepository {
+  get locations() {
+    return ['vk.com']
+  }
+
   get adapters() {
     return new Promise((resolve, reject) => {
-      if (location.hostname !== LOCATION) {
-        return resolve([]);
-      }
-
       resolve([
         new Adapter({
           type: TYPE,

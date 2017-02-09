@@ -1,4 +1,5 @@
 import {Adapter} from '../adapter';
+import {AbstractAdapterRepository} from './abstract';
 
 export class Html5AdapterBehaviour {
   constructor(element) {
@@ -8,7 +9,7 @@ export class Html5AdapterBehaviour {
   }
 
   get label() {
-    return document.location.href;
+    return document.title;
   }
 
   play() {
@@ -49,7 +50,7 @@ export class Html5AdapterBehaviour {
 }
 
 const TYPE = 'html5';
-export class Html5AdapterRepository {
+export class Html5AdapterRepository extends AbstractAdapterRepository {
   htmlCollectionToArray(collection) {
     return [].map.call(collection, function (el) {
       return el;

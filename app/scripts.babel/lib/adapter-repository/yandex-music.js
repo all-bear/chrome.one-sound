@@ -1,6 +1,7 @@
 import {Adapter} from '../adapter';
 import {UniqId} from '../helper/uniq-id';
 import {ScriptInjection} from '../helper/script-injection';
+import {AbstractAdapterRepository} from './abstract';
 
 const EVENT_TYPE = 'ONE_SOUND_YANDEX_MUSIC_ADAPTER';
 class YandexExternalApi {
@@ -117,13 +118,13 @@ class YandexMusicAdapterBehaviour {
 
 const TYPE = 'yandex-music';
 const LOCATION = 'music.yandex.ua';
-export class YandexMusicAdapterRepository {
+export class YandexMusicAdapterRepository extends AbstractAdapterRepository {
+  get locations() {
+    return [LOCATION];
+  }
+
   get adapters() {
     return new Promise((resolve, reject) => {
-      if (location.hostname !== LOCATION) {
-        return resolve([]);
-      }
-
       resolve([
         new Adapter({
           type: TYPE,
