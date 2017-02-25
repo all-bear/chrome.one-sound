@@ -7,6 +7,7 @@ Chrome extension which create a kind of a media chain, so exactly in one moment 
 - HTML5 AJAX audio and video - works on pages with ajax page reload, now works on:
     - Youtube
 - Yandex Music
+- VK Music
 
 ## Known issues
 - Youtube: 
@@ -21,3 +22,7 @@ Chrome extension which create a kind of a media chain, so exactly in one moment 
     - Go to audio page
     - _Expected result_ : audio should be stopped and player button should be with play icon on it
     - _Expected result_ : audio should is stopped but player button is with pause icon on it
+- Vk:
+    - No video support
+- All:
+    - Need to add delay on play stop events (about 300 ms)
