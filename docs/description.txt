@@ -1,0 +1,26 @@
+Only one audio/video will be played at time, all another audio/video will be paused and a kind of queue will be created.
+
+Problem:
+You listen to music, someone send you a funny video on youtube and you open it.
+Now you have playing at the same time your music and a funny video.
+
+Solution:
+- Return to the tab with your music, pause it
+- Again go back to the youtube tab, rewind the video to the beginning
+- When the video ends, you need open tab with your music and continue listening to it
+
+Good solution:
+Just install this extension and it will do everything for you. How it works:
+- When any content (audio or video) start playing, the already playing audio/video will be paused
+- When you stop the current audio/video previously paused content continuing to play
+
+So, it means, that a queue of audio/video is formed. And only one content can be played in a one moment of time.
+
+Currently, such providers are supported:
+- Youtube
+- Vkontakte (audio only)
+- Yandex music
+- Html audio / video
+
+PS: write in the comments which sites/providers of audio you would like to have added. 
+Also this is only alpha version so I will be really glad if you write about some bugs or features (that you want) :)
