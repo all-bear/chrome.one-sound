@@ -26,6 +26,8 @@
 
 .skin-default .chain .control-box {
   float: right;
+  border-left: 1px solid lightgray;
+  paddin-left: 4px;
 }
 
 .skin-default .chain .label {
@@ -44,6 +46,11 @@
 
 .skin-default button.control {
   padding: 6px;
+  height: 30px;
+  width: 30px;
+  display: block;
+  float: left;
+  margin-left: 3px;
 }
 
 .skin-default .btn-play:before {
@@ -56,10 +63,4 @@
 
 .skin-default .btn-remove:before {
   content: '\2716';
-}
-
-.skin-default .control-box:before {
-  content: '';
-  margin: 0 8px;
-  border-left: 1px solid lightgray;
 }
