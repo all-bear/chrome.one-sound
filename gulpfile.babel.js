@@ -16,7 +16,7 @@ gulp.task('extras', () => {
     'app/_locales/**',
     '!app/scripts.babel',
     '!app/*.json',
-    '!app/*.html',
+    '!app/*.html'
   ], {
     base: 'app',
     dot: true
@@ -61,7 +61,7 @@ gulp.task('images', () => {
 });
 
 gulp.task('html',  () => {
-  return gulp.src('app/*.html')
+  return gulp.src('app/**/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.sourcemaps.init())
     .pipe($.if('*.js', $.uglify()))
@@ -74,7 +74,7 @@ gulp.task('html',  () => {
 gulp.task('chromeManifest', () => {
   return gulp.src('app/manifest.json')
     .pipe($.chromeManifest({
-      buildnumber: true,
+      buildnumber: false,
       background: {
         target: 'scripts/background.js',
         exclude: [
