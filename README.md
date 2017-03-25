@@ -26,3 +26,4 @@ Chrome extension which create a kind of a media chain, so exactly in one moment 
     - No video support
 - All:
     - Need to add delay on play stop events (about 300 ms)
+    - When audio removed from chain, it should not be added to chain on play untill page reload
