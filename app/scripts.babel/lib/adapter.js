@@ -2,6 +2,7 @@
 
 import {transport} from './transport';
 import {UniqId} from '../../bower_components/uniq-id/dist/js/uniq-id';
+import {Settings} from '../../bower_components/chrome-lib-settings/dist/js/settings'
 
 export class Adapter {
   constructor(data) {
@@ -14,12 +15,20 @@ export class Adapter {
     this.destroed = false;
   }
 
-  updateState(action) {
-    if (action) {
-      action();
-    }
+  updateState(action, delay) {
+    Settings.load((settings) => {
+      if (!delay) {
+        delay = settings.action_delay;
+      }
 
-    this.state = this.stateObj;
+      setTimeout(() => {
+        if (action) {
+          action();
+        }
+
+        this.state = this.stateObj;
+      }, delay);
+    });
   }
 
   toJSON() {
@@ -72,6 +81,7 @@ export class Adapter {
       if (adapter.id !== this.id) {
         return;
       }
+
 
       this.updateState(this.behavior.play.bind(this.behavior));
     });

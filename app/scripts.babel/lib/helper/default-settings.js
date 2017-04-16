@@ -1,3 +1,4 @@
 export const DEFAULT_SETTINGS = {
-  skin: 'default'
+  skin: 'default',
+  action_delay: 300
 };
