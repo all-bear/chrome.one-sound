@@ -17,9 +17,13 @@ export class AbstractAdapterRepository {
       var oldUnload = window.onbeforeunload;
 
       return () => {
-        cb();
+        if (cb) {
+          cb();  
+        }
 
-        oldUnload.call(window);
+        if (oldUnload) {
+          oldUnload.call(window);  
+        }
       };
     })();
   }
