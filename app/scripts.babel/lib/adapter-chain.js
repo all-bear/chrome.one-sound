@@ -59,6 +59,10 @@ class AdapterChain {
     this.transport.send('play-adapter', adapter, true);
   }
 
+  ignore(adapter) {
+    this.transport.send('ignore-adapter', adapter, true);
+  }
+
   triggerChainChange() {
     this.transport.send('chain-changed', this.chain.chain, true);
   }
@@ -81,6 +85,18 @@ class AdapterChain {
     this.transport.on('update-adapter', adapter => {
       this.chain.update(adapter);
       this.triggerChainChange();
+    });
+
+    this.transport.on('disable-adapter', adapter => {
+      if (this.chain.last.id === adapter.id) {
+        this.chain.remove(adapter);
+        this.play(this.chain.last);
+      } else {
+        this.chain.remove(adapter);
+      }
+      this.triggerChainChange();
+
+      this.ignore(adapter);
     });
 
     this.transport.on('remove-adapter', adapter => { // TODO move to constants

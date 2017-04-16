@@ -12,6 +12,7 @@ export class Adapter {
     this.behavior = data.behavior;
     this.state = this.stateObj;
     this.destroed = false;
+    this.ignoredAdapters = [];
   }
 
   updateState(action) {
@@ -35,6 +36,10 @@ export class Adapter {
     };
   }
 
+  get isIgnored() {
+    return this.ignoredAdapters.find(adapter => adapter.id === this.id);
+  }
+
   register() {
     if (this.destroed) {
       return;
@@ -45,7 +50,7 @@ export class Adapter {
     }
 
     this.behavior.registerChangeListener(() => {
-      if (this.destroed) {
+      if (this.destroed || this.isIgnored) {
         return;
       }
 
@@ -65,7 +70,7 @@ export class Adapter {
     });
 
     this.transport.on('play-adapter', adapter => {
-      if (this.destroed) {
+      if (this.destroed || this.isIgnored) {
         return;
       }
 
@@ -78,7 +83,7 @@ export class Adapter {
     });
 
     this.transport.on('pause-adapter', adapter => {
-      if (this.destroed) {
+      if (this.destroed || this.isIgnored) {
         return;
       }
 
@@ -87,6 +92,10 @@ export class Adapter {
       }
 
       this.updateState(this.behavior.pause.bind(this.behavior));
+    });
+
+    this.transport.on('ignore-adapter', adapter => {
+      this.ignoredAdapters.push(adapter);
     });
   }
 

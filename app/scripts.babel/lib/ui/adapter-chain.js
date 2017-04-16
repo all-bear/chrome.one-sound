@@ -54,7 +54,7 @@ class AdapterChainUi {
         adapter = chain.find(adapter => adapterId === adapter.id);
 
       btn.onclick = () => {
-        transport.send('remove-adapter', adapter, false, this.reloadChain.bind(this));
+        transport.send('disable-adapter', adapter, false, this.reloadChain.bind(this));
       };
     });
 
