@@ -1,6 +1,6 @@
 import {transport} from '../transport';
-import {I18n} from '../helper/i18n';
-import {DEFAULT_SETTINGS} from '../helper/default-settings'
+import {InlineI18n} from '../../../bower_components/chrome-lib-inline-i18n/dist/js/i18n';
+import {Settings} from '../../../bower_components/chrome-lib-settings/dist/js/settings'
 
 class AdapterChainUi {
   constructor() {
@@ -9,7 +9,7 @@ class AdapterChainUi {
   }
 
   init() {
-    I18n.render();
+    InlineI18n.render();
 
     this.holder = document.getElementById('chain-holder');
     this.placeholder = '<div class="empty-query-placeholder">' + document.getElementById('if-empty-query').innerHTML + '</div>';
@@ -21,8 +21,8 @@ class AdapterChainUi {
   }
 
   initSkin() {
-    chrome.storage.sync.get(DEFAULT_SETTINGS, opts => {
-      document.getElementsByTagName('html')[0].className += 'skin-' + opts.skin;
+    Settings.load(settings => {
+      document.getElementsByTagName('html')[0].className += 'skin-' + settings.skin;
     });
   }
 
