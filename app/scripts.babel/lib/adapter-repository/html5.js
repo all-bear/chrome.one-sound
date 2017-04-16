@@ -46,6 +46,7 @@ export class Html5AdapterBehaviour {
       cb.call();
     });
     this.element.addEventListener('loadstart', cb);
+    this.element.addEventListener('seeking', cb);
   }
 }
 
