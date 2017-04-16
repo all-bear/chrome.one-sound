@@ -90,7 +90,9 @@ class AdapterChain {
     this.transport.on('disable-adapter', adapter => {
       if (this.chain.last.id === adapter.id) {
         this.chain.remove(adapter);
-        this.play(this.chain.last);
+        if (this.chain.length) {
+          this.play(this.chain.last);
+        }
       } else {
         this.chain.remove(adapter);
       }
@@ -102,7 +104,9 @@ class AdapterChain {
     this.transport.on('remove-adapter', adapter => { // TODO move to constants
       if (this.chain.last.id === adapter.id) {
         this.chain.remove(adapter);
-        this.play(this.chain.last);
+        if (this.chain.length) {
+          this.play(this.chain.last);
+        }
       } else {
         this.chain.remove(adapter);
       }
