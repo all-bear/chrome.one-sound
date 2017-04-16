@@ -2,7 +2,6 @@
 
 import {transport} from './transport';
 import {UniqId} from '../../bower_components/uniq-id/dist/js/uniq-id';
-import {Settings} from '../../bower_components/chrome-lib-settings/dist/js/settings'
 
 export class Adapter {
   constructor(data) {
@@ -15,20 +14,12 @@ export class Adapter {
     this.destroed = false;
   }
 
-  updateState(action, delay) {
-    Settings.load((settings) => {
-      if (!delay) {
-        delay = settings.action_delay;
-      }
+  updateState(action) {
+    if (action) {
+      action();
+    }
 
-      setTimeout(() => {
-        if (action) {
-          action();
-        }
-
-        this.state = this.stateObj;
-      }, delay);
-    });
+    this.state = this.stateObj;
   }
 
   toJSON() {
