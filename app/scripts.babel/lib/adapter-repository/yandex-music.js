@@ -1,6 +1,6 @@
 import {Adapter} from '../adapter';
-import {UniqId} from '../helper/uniq-id';
-import {ScriptInjection} from '../helper/script-injection';
+import {UniqId} from '../../../bower_components/uniq-id/dist/js/uniq-id';
+import {ScriptInjection} from '../../../bower_components/chrome-lib-script-injection/dist/js/script-injection';
 import {AbstractAdapterRepository} from './abstract';
 
 const EVENT_TYPE = 'ONE_SOUND_YANDEX_MUSIC_ADAPTER';

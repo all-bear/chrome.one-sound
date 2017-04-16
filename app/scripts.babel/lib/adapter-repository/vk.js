@@ -1,5 +1,5 @@
 import {Adapter} from '../adapter';
-import {ScriptInjection} from '../helper/script-injection';
+import {ScriptInjection} from '../../../bower_components/chrome-lib-script-injection/dist/js/script-injection';
 import {Html5AdapterBehaviour} from './html5';
 import {AbstractAdapterRepository} from './abstract';
 

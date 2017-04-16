@@ -1,7 +1,7 @@
 /* global window */
 
 import {transport} from './transport';
-import {UniqId} from './helper/uniq-id';
+import {UniqId} from '../../bower_components/uniq-id/dist/js/uniq-id';
 
 export class Adapter {
   constructor(data) {
