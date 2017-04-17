@@ -45,7 +45,10 @@ export class Html5AdapterBehaviour {
 
       cb.call();
     });
-    this.element.addEventListener('loadstart', cb);
+    this.element.addEventListener('seeking', () => {
+      this.isPauseTriggeredProgrammatically = false;
+      cb.call();
+    });
     this.element.addEventListener('playing', () => {
       this.isPauseTriggeredProgrammatically = false;
       cb.call();
