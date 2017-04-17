@@ -49,6 +49,7 @@ class AdapterChain {
   constructor() {
     this.chain = new Chain();
     this.transport = transport;
+    this.isPlayed = true;
   }
 
   pause(adapter) {
@@ -79,6 +80,7 @@ class AdapterChain {
 
       this.play(adapter);
       this.chain.push(adapter);
+      this.isPlayed = true;
       this.triggerChainChange();
     });
 
@@ -113,8 +115,27 @@ class AdapterChain {
       this.triggerChainChange();
     });
 
+    this.transport.on('pause-chain', () => {
+      this.isPlayed = false;
+
+      if (this.chain.length) {
+        this.pause(this.chain.last);
+      }
+    });
+
+    this.transport.on('play-chain', () => {
+      this.isPlayed = true;
+
+      if (this.chain.length) {
+        this.play(this.chain.last);
+      }
+    });
+
     this.transport.on('get-chain', (data, cb) => {
-      cb(this.chain.chain);
+      cb({
+        chain: this.chain.chain,
+        isPlayed: this.isPlayed
+      });
     });
   }
 }

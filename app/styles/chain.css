@@ -51,6 +51,7 @@
   display: block;
   float: left;
   margin-left: 3px;
+  outline: none !important;
 }
 
 .skin-default .btn-play:before {
@@ -59,6 +60,21 @@
 
 .skin-default .btn-pause:before {
   content: '\2590\A0\258C';
+}
+
+.skin-default button.action {
+  display: block;
+  width: 100%;
+  border-radius: 0;
+  padding: 8px;
+  font-size: 15px;
+  border: 1px solid lightgrey;
+  background: transparent;
+  outline: none !important;
+}
+
+.skin-default .control-panel {
+  padding: 10px 0 0 0;
 }
 
 .skin-default .btn-remove:before {

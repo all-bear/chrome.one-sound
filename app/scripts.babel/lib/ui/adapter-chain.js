@@ -36,7 +36,8 @@ class AdapterChainUi {
     return template;
   }
 
-  renderChain(chain) {
+  renderChain(chainData) {
+    let {chain, isPlayed} = chainData;
     let template = '';
 
     if (chain.length) {
@@ -66,6 +67,20 @@ class AdapterChainUi {
         transport.send('add-adapter', adapter, false, this.reloadChain.bind(this));
       };
     });
+
+    const playChainBtn = document.querySelector('#play-chain');
+    const pauseChainBtn = document.querySelector('#pause-chain');
+
+    playChainBtn.style.display = (!isPlayed && chain.length) ? 'block' : 'none';
+    pauseChainBtn.style.display = (isPlayed && chain.length) ? 'block' : 'none';
+
+    playChainBtn.onclick = () => {
+      transport.send('play-chain', null, false, this.reloadChain.bind(this));
+    };
+
+    pauseChainBtn.onclick = () => {
+      transport.send('pause-chain', null, false, this.reloadChain.bind(this));
+    };
   }
 
   reloadChain() {

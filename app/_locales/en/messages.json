@@ -11,6 +11,14 @@
     "message": "There is no music in query for now ...",
     "description": "Message when music query is empty"
   },
+  "play_music_query": {
+    "message": "Play",
+    "description": "Message to play music query"
+  },
+  "pause_music_query": {
+    "message": "Pause",
+    "description": "Message to pause music query"
+  },
   "music_chain_title": {
     "message": "Music Chain",
     "description": "Music chain title"
