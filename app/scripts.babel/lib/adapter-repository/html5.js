@@ -1,11 +1,25 @@
 import {Adapter} from '../adapter';
 import {AbstractAdapterRepository} from './abstract';
 
+class MouseState {
+  constructor() {
+    // TODO add tablet support
+    document.addEventListener('mousedown', () => {
+      this.isPressed = true;
+    });
+
+    document.addEventListener('mouseup', () => {
+      this.isPressed = false;
+    });
+  }
+}
+
 export class Html5AdapterBehaviour {
   constructor(element) {
     this.element = element;
     this.isPlayTriggeredProgrammatically = false;
     this.isPauseTriggeredProgrammatically = false;
+    this.mouseState = new MouseState();
   }
 
   get label() {
@@ -37,23 +51,29 @@ export class Html5AdapterBehaviour {
       cb.call();
     });
     this.element.addEventListener('pause', () => {
-      if (this.isPauseTriggeredProgrammatically) {
-        this.isPauseTriggeredProgrammatically = false;
+      const action = () => {
+        if (this.isPauseTriggeredProgrammatically) {
+          this.isPauseTriggeredProgrammatically = false;
 
-        return;
+          return;
+        }
+
+        cb.call();
+      };
+
+      if (this.mouseState.isPressed) { // prevent pause on seek when mouse is still not raised
+        document.addEventListener('mouseup', () => {
+          action.call();
+        });
+      } else {
+        action.call();
       }
-
-      cb.call();
     });
     this.element.addEventListener('seeking', () => {
       this.isPauseTriggeredProgrammatically = false;
       cb.call();
     });
     this.element.addEventListener('playing', () => {
-      this.isPauseTriggeredProgrammatically = false;
-      cb.call();
-    });
-    this.element.addEventListener('progress', () => {
       this.isPauseTriggeredProgrammatically = false;
       cb.call();
     });
