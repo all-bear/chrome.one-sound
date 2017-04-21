@@ -106,7 +106,7 @@ class AdapterChain {
     this.transport.on('remove-adapter', adapter => { // TODO move to constants
       if (this.chain.last.id === adapter.id) {
         this.chain.remove(adapter);
-        if (this.chain.length) {
+        if (this.chain.length && this.isPlayed) {
           this.play(this.chain.last);
         }
       } else {
