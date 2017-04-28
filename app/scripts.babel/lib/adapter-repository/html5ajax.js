@@ -2,14 +2,7 @@ import {Adapter} from '../adapter';
 import {Html5AdapterRepository, Html5AdapterBehaviour} from './html5';
 
 const TYPE = 'html5ajax';
-const YOUTUBE_LOCATION = 'www.youtube.com';
 export class Html5AjaxAdapterRepository extends Html5AdapterRepository {
-  get locations() {
-    return [
-      YOUTUBE_LOCATION
-    ];
-  }
-
   loadOn(cb) {
     super.loadOn(cb);
 

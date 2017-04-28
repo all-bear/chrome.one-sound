@@ -1,15 +1,15 @@
 import {Html5AdapterRepository} from './html5';
-import {Html5AjaxAdapterRepository} from './html5ajax';
 import {YandexMusicAdapterRepository} from './yandex-music';
 import {VkAdapterRepository} from './vk';
+import {YoutubeAdapterRepository} from './youtube';
 
 class AdapterRepository {
   constructor () {
     this.repositories = [
       new Html5AdapterRepository(),
-      new Html5AjaxAdapterRepository(),
       new YandexMusicAdapterRepository(),
-      new VkAdapterRepository()
+      new VkAdapterRepository(),
+      new YoutubeAdapterRepository()
     ];
 
     this.repositoryAdapters = this.repositories.reduce((basket, repository) => {
