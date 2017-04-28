@@ -11,6 +11,19 @@ export class YoutubeAdapterRepository extends Html5AjaxAdapterRepository {
     ];
   }
 
+  loadOn(cb) {
+    super.loadOn(cb);
+
+    if (document.getElementById('player') && !document.querySelector('#player video')) {
+      const interval = setInterval(() => {
+        if (document.querySelector('#player video')) {
+          clearInterval(interval);
+          cb();
+        }
+      }, 500);
+    }
+  }
+
   get adapters() {
     return new Promise((resolve, reject) => {
       resolve(this.playerDomElements.map(el => {
