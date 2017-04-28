@@ -70,6 +70,8 @@ class AdapterChain {
 
   init() {
     this.transport.on('add-adapter', adapter => { // TODO move to constants
+      this.isPlayed = true;
+
       if (this.chain.length && this.chain.last.id === adapter.id) {
         return;
       }
@@ -80,7 +82,6 @@ class AdapterChain {
 
       this.play(adapter);
       this.chain.push(adapter);
-      this.isPlayed = true;
       this.triggerChainChange();
     });
 
