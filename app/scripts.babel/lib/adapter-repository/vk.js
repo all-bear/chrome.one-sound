@@ -32,7 +32,7 @@ class VkAdapterBehaviour extends Html5AdapterBehaviour {
 const TYPE = 'vk';
 export class VkAdapterRepository extends AbstractAdapterRepository {
   get locations() {
-    return ['vk.com']
+    return ['vk\.com']
   }
 
   get adapters() {
