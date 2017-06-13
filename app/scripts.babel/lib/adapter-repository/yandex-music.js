@@ -10,6 +10,7 @@ class YandexExternalApi {
 
     ScriptInjection.execute(
       `((function () {
+        if (typeof externalAPI === 'undefined') return;
         externalAPI.on(externalAPI.EVENT_TRACK, function() {
           window.postMessage({id: "${eventId}" }, "*");
         });
@@ -32,6 +33,8 @@ class YandexExternalApi {
 
     ScriptInjection.execute(
       `((function () {
+        if (typeof externalAPI === 'undefined') return;
+
         var prevState,
             stateNeedHandle = false;
 
@@ -75,15 +78,15 @@ class YandexExternalApi {
   }
 
   get currentTrack() {
-    return JSON.parse(ScriptInjection.execute('JSON.stringify(externalAPI.getCurrentTrack())'));
+    return JSON.parse(ScriptInjection.execute('(typeof externalAPI !== \'undefined\') ? JSON.stringify(externalAPI.getCurrentTrack()) : \'null\''));
   }
 
   togglePause(status) {
-    ScriptInjection.execute(`externalAPI.togglePause(${status})`);
+    ScriptInjection.execute(`(typeof externalAPI !== \'undefined\') ? externalAPI.togglePause(${status}) : 'false'`);
   }
 
   get isPlaying() {
-    return ScriptInjection.execute('externalAPI.isPlaying()') === 'true';
+    return ScriptInjection.execute('(typeof externalAPI !== \'undefined\') ? externalAPI.isPlaying() : \'false\'') === 'true';
   }
 }
 
@@ -117,11 +120,11 @@ class YandexMusicAdapterBehaviour {
 }
 
 const TYPE = 'yandex-music';
-const MUSIC_LOCATION = 'music.yandex.ua';
-const RADIO_LOCATION = 'radio.yandex.ua';
+const MUSIC_LOCATION_UA = 'music\.yandex\.';
+const RADIO_LOCATION_UA = 'radio\.yandex\.';
 export class YandexMusicAdapterRepository extends AbstractAdapterRepository {
   get locations() {
-    return [MUSIC_LOCATION, RADIO_LOCATION];
+    return [MUSIC_LOCATION_UA, RADIO_LOCATION_UA];
   }
 
   get adapters() {
