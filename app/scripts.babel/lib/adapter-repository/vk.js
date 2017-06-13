@@ -4,6 +4,10 @@ import {Html5AdapterBehaviour} from './html5';
 import {AbstractAdapterRepository} from './abstract';
 
 class VkExternalApi {
+  get isReady() {
+    return ScriptInjection.execute('typeof getAudioPlayer !== \'undefined\'') === 'true';
+  }
+
   get audioElement() {
     ScriptInjection.execute('document.body.appendChild(getAudioPlayer()._impl._currentAudioEl)');
 
@@ -32,17 +36,26 @@ class VkAdapterBehaviour extends Html5AdapterBehaviour {
 const TYPE = 'vk';
 export class VkAdapterRepository extends AbstractAdapterRepository {
   get locations() {
-    return ['vk\.com']
+    return ['vk.com']
   }
 
   get adapters() {
     return new Promise((resolve, reject) => {
-      resolve([
-        new Adapter({
-          type: TYPE,
-          behavior: new VkAdapterBehaviour(new VkExternalApi())
-        })
-      ]);
+      const Api = new VkExternalApi();
+      const interval = setInterval(() => {
+        if (!Api.isReady) {
+          return;
+        }
+
+        clearInterval(interval);
+
+        resolve([
+          new Adapter({
+            type: TYPE,
+            behavior: new VkAdapterBehaviour(Api)
+          })
+        ]);
+      }, 100);
     });
   }
 }
