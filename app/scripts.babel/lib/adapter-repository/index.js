@@ -1,14 +1,17 @@
 import {Html5AdapterRepository} from './html5';
 import {YandexMusicAdapterRepository} from './yandex-music';
-import {VkAdapterRepository} from './vk';
+import {VkAudioAdapterRepository} from './vk/audio';
+import {VkVideoAdapterRepository} from './vk/video';
 import {YoutubeAdapterRepository} from './youtube';
+import {transport} from '../transport';
 
 class AdapterRepository {
   constructor () {
     this.repositories = [
       new Html5AdapterRepository(),
       new YandexMusicAdapterRepository(),
-      new VkAdapterRepository(),
+      new VkAudioAdapterRepository(),
+      new VkVideoAdapterRepository(),
       new YoutubeAdapterRepository()
     ];
 
@@ -31,6 +34,10 @@ class AdapterRepository {
     }).catch(reason => {
       throw reason;
     });
+
+    if (repository.onLoad) {
+      repository.onLoad(this);
+    }
   }
 
   destroy(repository) {
@@ -71,6 +78,13 @@ class AdapterRepository {
         this.destroy(repository);
       });
     });
+  }
+
+  /**
+   * Check is all adapters in chain are alive, if some of them are died remove them from query
+   */
+  redraw() {
+    transport.send('redraw-adapters', this);
   }
 }
 

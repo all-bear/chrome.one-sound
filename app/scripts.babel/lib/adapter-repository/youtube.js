@@ -5,6 +5,10 @@ import {Html5AjaxAdapterRepository} from './html5ajax';
 const TYPE = 'youtube';
 const YOUTUBE_LOCATION = 'www.youtube.com';
 export class YoutubeAdapterRepository extends Html5AjaxAdapterRepository {
+  get type() {
+    return TYPE;
+  }
+
   get locations() {
     return [
       YOUTUBE_LOCATION

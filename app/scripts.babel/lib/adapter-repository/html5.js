@@ -78,10 +78,18 @@ export class Html5AdapterBehaviour {
       cb.call();
     });
   }
+
+  isAlive() {
+    return document.body.contains(this.element);
+  }
 }
 
 const TYPE = 'html5';
 export class Html5AdapterRepository extends AbstractAdapterRepository {
+  get type() {
+    return TYPE;
+  }
+
   htmlCollectionToArray(collection) {
     return [].map.call(collection, function (el) {
       return el;

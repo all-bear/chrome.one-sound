@@ -1,9 +1,9 @@
-import {Adapter} from '../adapter';
-import {ScriptInjection} from '../../../bower_components/chrome-lib-script-injection/dist/js/script-injection';
-import {Html5AdapterBehaviour} from './html5';
-import {AbstractAdapterRepository} from './abstract';
+import {Adapter} from '../../adapter';
+import {ScriptInjection} from '../../../../bower_components/chrome-lib-script-injection/dist/js/script-injection';
+import {Html5AdapterBehaviour} from '../html5';
+import {AbstractVkAdapterRepository} from './abstract';
 
-class VkExternalApi {
+class VkAudioExternalApi {
   get isReady() {
     return ScriptInjection.execute('typeof getAudioPlayer !== \'undefined\'') === 'true';
   }
@@ -19,7 +19,7 @@ class VkExternalApi {
   }
 }
 
-class VkAdapterBehaviour extends Html5AdapterBehaviour {
+class VkAudioAdapterBehaviour extends Html5AdapterBehaviour {
   constructor(api) {
     super(api.audioElement);
 
@@ -33,17 +33,17 @@ class VkAdapterBehaviour extends Html5AdapterBehaviour {
   }
 }
 
-const TYPE = 'vk';
-export class VkAdapterRepository extends AbstractAdapterRepository {
-  get locations() {
-    return ['vk.com']
+const TYPE = 'vk-audio';
+export class VkAudioAdapterRepository extends AbstractVkAdapterRepository {
+  get type() {
+    return TYPE;
   }
 
   get adapters() {
     return new Promise((resolve, reject) => {
-      const Api = new VkExternalApi();
+      const AudioApi = new VkAudioExternalApi();
       const interval = setInterval(() => {
-        if (!Api.isReady) {
+        if (!AudioApi.isReady) {
           return;
         }
 
@@ -52,7 +52,7 @@ export class VkAdapterRepository extends AbstractAdapterRepository {
         resolve([
           new Adapter({
             type: TYPE,
-            behavior: new VkAdapterBehaviour(Api)
+            behavior: new VkAudioAdapterBehaviour(AudioApi)
           })
         ]);
       }, 100);

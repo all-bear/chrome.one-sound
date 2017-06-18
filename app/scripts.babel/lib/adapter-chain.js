@@ -1,5 +1,7 @@
 import {transport} from './transport';
 
+const ALIVE_ADAPTER_CHECK_TIMEOUT = 500;
+
 class Chain {
   constructor() {
     this.chain = [];
@@ -43,6 +45,10 @@ class Chain {
 
     return this.chain[this.chain.length - 1];
   }
+
+  get all() {
+    return this.chain;
+  }
 }
 
 class AdapterChain {
@@ -66,6 +72,18 @@ class AdapterChain {
 
   triggerChainChange() {
     this.transport.send('chain-changed', this.chain.chain, true);
+  }
+
+  remove(adapter) {
+    if (this.chain.last.id === adapter.id) {
+      this.chain.remove(adapter);
+      if (this.chain.length && this.isPlayed) {
+        this.play(this.chain.last);
+      }
+    } else {
+      this.chain.remove(adapter);
+    }
+    this.triggerChainChange();
   }
 
   init() {
@@ -105,15 +123,7 @@ class AdapterChain {
     });
 
     this.transport.on('remove-adapter', adapter => { // TODO move to constants
-      if (this.chain.last.id === adapter.id) {
-        this.chain.remove(adapter);
-        if (this.chain.length && this.isPlayed) {
-          this.play(this.chain.last);
-        }
-      } else {
-        this.chain.remove(adapter);
-      }
-      this.triggerChainChange();
+      this.remove(adapter)
     });
 
     this.transport.on('pause-chain', () => {
@@ -137,6 +147,26 @@ class AdapterChain {
         chain: this.chain.chain,
         isPlayed: this.isPlayed
       });
+    });
+
+    this.transport.on('redraw-adapters', (data, cb) => {
+      const aliveAdapters = [];
+
+      this.chain.all.forEach((adapter) => {
+        this.transport.send('ping-alive-adapter', adapter, true, (status) => {
+          if (status) {
+            aliveAdapters.push(adapter);
+          }
+        });
+      });
+
+      setTimeout(() => {
+        this.chain.all.forEach((adapter) => {
+          if (!aliveAdapters.find((aliveAdapter) => aliveAdapter.id === adapter.id)) {
+            this.remove(adapter)
+          }
+        });
+      }, ALIVE_ADAPTER_CHECK_TIMEOUT);
     });
   }
 }

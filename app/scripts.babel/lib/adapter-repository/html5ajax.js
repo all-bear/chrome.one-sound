@@ -1,6 +1,8 @@
 import {Adapter} from '../adapter';
 import {Html5AdapterRepository, Html5AdapterBehaviour} from './html5';
 
+const RENDER_PAGE_TIMEOUT = 1000;
+
 const TYPE = 'html5ajax';
 export class Html5AjaxAdapterRepository extends Html5AdapterRepository {
   loadOn(cb) {
@@ -13,7 +15,7 @@ export class Html5AjaxAdapterRepository extends Html5AdapterRepository {
       }
 
       prevHref = window.location.href;
-      cb();
+      setTimeout(cb, RENDER_PAGE_TIMEOUT);
     }, 100);
   }
 

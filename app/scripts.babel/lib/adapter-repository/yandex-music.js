@@ -121,9 +121,13 @@ class YandexMusicAdapterBehaviour {
 }
 
 const TYPE = 'yandex-music';
-const MUSIC_LOCATION = 'music\.yandex\.';
-const RADIO_LOCATION = 'radio\.yandex\.';
+const MUSIC_LOCATION = '^music\.yandex\.';
+const RADIO_LOCATION = '^radio\.yandex\.';
 export class YandexMusicAdapterRepository extends AbstractAdapterRepository {
+  get type() {
+    return TYPE;
+  }
+
   get locations() {
     return [MUSIC_LOCATION, RADIO_LOCATION];
   }

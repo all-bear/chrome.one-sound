@@ -13,6 +13,7 @@ export class Adapter {
     this.state = this.stateObj;
     this.destroed = false;
     this.ignoredAdapters = [];
+    this.isAlive = data.isAlive || (() => true);
   }
 
   updateState(action) {
@@ -78,7 +79,6 @@ export class Adapter {
         return;
       }
 
-
       this.updateState(this.behavior.play.bind(this.behavior));
     });
 
@@ -96,6 +96,22 @@ export class Adapter {
 
     this.transport.on('ignore-adapter', adapter => {
       this.ignoredAdapters.push(adapter);
+    });
+
+    this.transport.on('ping-alive-adapter', (adapter, cb) => {
+      if (this.destroed || this.isIgnored) {
+        return;
+      }
+
+      if (adapter.id !== this.id) {
+        return;
+      }
+
+      if (this.behavior.isAlive && !this.behavior.isAlive()) {
+        return;
+      }
+
+      cb(true);
     });
   }
 
