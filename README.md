@@ -7,5 +7,5 @@ Chrome extension which create a kind of a media chain, so exactly in one moment 
 - HTML5 AJAX audio and video - works on pages with ajax page reload, now works on:
     - Youtube
 - Yandex Music
-- VK Music
+- VKONTAKTE
 
