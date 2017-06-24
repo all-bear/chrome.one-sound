@@ -65,6 +65,16 @@ export class Html5AdapterBehaviour {
         document.addEventListener('mouseup', () => {
           action.call();
         });
+      } else if (this.isWaiting) {
+        var waitingHandled = false;
+        document.addEventListener('playing', () => {
+          if (waitingHandled) {
+            return;
+          }
+
+          waitingHandled = true;
+          action.call();
+        });
       } else {
         action.call();
       }
@@ -73,8 +83,12 @@ export class Html5AdapterBehaviour {
       this.isPauseTriggeredProgrammatically = false;
       cb.call();
     });
+    this.element.addEventListener('waiting', () => {
+      this.isWaiting = true;
+    });
     this.element.addEventListener('playing', () => {
       this.isPauseTriggeredProgrammatically = false;
+      this.isWaiting = false;
       cb.call();
     });
   }
