@@ -3,6 +3,8 @@
 import {transport} from './transport';
 import {UniqId} from '../../bower_components/uniq-id/dist/js/uniq-id';
 
+const CHANGE_LISTENTER_BOUNCE_TIMEOUT_VALUE = 300;
+
 export class Adapter {
   constructor(data) {
     this.transport = transport;
@@ -51,23 +53,27 @@ export class Adapter {
     }
 
     this.behavior.registerChangeListener(() => {
-      if (this.destroed || this.isIgnored) {
-        return;
-      }
+      this.changeListenerBounceTimeout = setTimeout(() => {
+        clearTimeout(this.changeListenerBounceTimeout);
 
-      if (this.behavior.isPlayed != this.state.isPlayed) {
-        this.transport.send(
-          this.behavior.isPlayed ? 'add-adapter' : 'remove-adapter',
-          this
-        );
-      } else {
-        this.transport.send(
-          'update-adapter',
-          this
-        )
-      }
+        if (this.destroed || this.isIgnored) {
+          return;
+        }
 
-      this.updateState();
+        if (this.behavior.isPlayed != this.state.isPlayed) {
+          this.transport.send(
+            this.behavior.isPlayed ? 'add-adapter' : 'remove-adapter',
+            this
+          );
+        } else {
+          this.transport.send(
+            'update-adapter',
+            this
+          )
+        }
+
+        this.updateState();
+      }, CHANGE_LISTENTER_BOUNCE_TIMEOUT_VALUE);
     });
 
     this.transport.on('play-adapter', adapter => {
