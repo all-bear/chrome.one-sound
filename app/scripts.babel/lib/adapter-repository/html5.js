@@ -37,7 +37,7 @@ export class Html5AdapterBehaviour {
   }
 
   get isPlayed() {
-    return !this.element.paused;
+    return !this.element.paused || this.element.seeking;
   }
 
   registerChangeListener(cb) {
@@ -75,6 +75,8 @@ export class Html5AdapterBehaviour {
           waitingHandled = true;
           action.call();
         });
+      } else if (this.element.seeking) {
+        //NOP
       } else {
         action.call();
       }
