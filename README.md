@@ -8,4 +8,5 @@ Chrome extension which create a kind of a media chain, so exactly in one moment 
     - Youtube
 - Yandex Music
 - VKONTAKTE
+- Sound Cloud
 

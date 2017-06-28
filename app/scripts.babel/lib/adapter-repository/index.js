@@ -3,6 +3,7 @@ import {YandexMusicAdapterRepository} from './yandex-music';
 import {VkAudioAdapterRepository} from './vk/audio';
 import {VkVideoAdapterRepository} from './vk/video';
 import {YoutubeAdapterRepository} from './youtube';
+import {SoundCloudAdapterRepository} from './sound-cloud';
 import {transport} from '../transport';
 
 class AdapterRepository {
@@ -12,7 +13,8 @@ class AdapterRepository {
       new YandexMusicAdapterRepository(),
       new VkAudioAdapterRepository(),
       new VkVideoAdapterRepository(),
-      new YoutubeAdapterRepository()
+      new YoutubeAdapterRepository(),
+      new SoundCloudAdapterRepository()
     ];
 
     this.repositoryAdapters = this.repositories.reduce((basket, repository) => {
