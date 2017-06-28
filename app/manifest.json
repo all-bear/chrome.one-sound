@@ -25,6 +25,17 @@
       ],
       "run_at": "document_end",
       "all_frames": true
+    },
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "scripts/pre-content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
     }
   ],
   "permissions": [

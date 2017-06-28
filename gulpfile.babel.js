@@ -94,6 +94,7 @@ gulp.task('babel', () => {
     'background.js',
     'chromereload.js',
     'content.js',
+    'pre-content.js',
     'options.js',
     'popup.js'
   ];
