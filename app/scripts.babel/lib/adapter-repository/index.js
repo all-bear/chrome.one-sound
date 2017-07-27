@@ -25,13 +25,17 @@ class AdapterRepository {
 
   }
 
+  process(repository, adapter) {
+    adapter.register();
+    this.repositoryAdapters[repository.type].push(adapter);
+  }
+
   load(repository) {
     this.destroy(repository);
 
     repository.adapters.then(adapters => {
       adapters.forEach(adapter => {
-        adapter.register();
-        this.repositoryAdapters[repository.type].push(adapter);
+        this.process(repository, adapter);
       });
     }).catch(reason => {
       throw reason;
