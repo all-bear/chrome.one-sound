@@ -40,12 +40,21 @@ export class HiddenElementsTracker {
             return;
           }
 
+          if (!window.oneSoundHiddenElements[tag].find(function (element) {return !element.appneded;})) {
+            return;
+          }
+
           var container = document.createElement('div');
           container.style.display = 'none';
           container.className += 'one-sound-extension-hidden-container';
           document.body.appendChild(container);
 
           window.oneSoundHiddenElements[tag].forEach(function (element) {
+            if (element.appneded) {
+              return;
+            }
+
+            element.appneded = true;
             container.appendChild(element);
           });
         })('${tag}');
