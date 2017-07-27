@@ -4,14 +4,10 @@ import {HiddenElementsTracker} from '../helper/hidden-elements-tracker';
 import {AbstractAdapterRepository} from './abstract'
 
 class SoundCloudExternalApi {
-  get isReady() {
+  get audioElements() {
     HiddenElementsTracker.append('audio');
 
-    return !!window.document.getElementsByTagName('audio')[0];
-  }
-
-  get audioElement() {
-    return window.document.getElementsByTagName('audio')[0];
+    return Array.prototype.slice.call(window.document.getElementsByTagName('audio'), 0);
   }
 
   get resolvePanel() {
@@ -42,8 +38,8 @@ class SoundCloudExternalApi {
 }
 
 class SoundCloudAdapterBehaviour extends Html5AdapterBehaviour {
-  constructor(api) {
-    super(api.audioElement);
+  constructor(api, element) {
+    super(element);
 
     this.api = api;
   }
@@ -73,23 +69,34 @@ export class SoundCloudAdapterRepository extends AbstractAdapterRepository {
     return ['^soundcloud\.com']
   }
 
-  get adapters() {
-    return new Promise((resolve, reject) => {
-      const AudioApi = new SoundCloudExternalApi();
-      const interval = setInterval(() => {
-        if (!AudioApi.isReady) {
+  onLoad(repositoryAdapter) {
+    const AudioApi = new SoundCloudExternalApi();
+
+    let prevAudioCount = 0;
+    const interval = setInterval(() => {
+      if (AudioApi.audioElements.length <= prevAudioCount) {
+        return;
+      }
+
+      const newAudioElements = AudioApi.audioElements.slice(-(AudioApi.audioElements.length - prevAudioCount));
+
+      newAudioElements.forEach((element) => {
+        if (!element.getAttribute('src')) {
           return;
         }
+        repositoryAdapter.process(this, new Adapter({
+          type: TYPE,
+          behavior: new SoundCloudAdapterBehaviour(AudioApi, element)
+        }));
+      });
 
-        clearInterval(interval);
+      prevAudioCount += newAudioElements.length;
+    }, 1000);
+  }
 
-        resolve([
-          new Adapter({
-            type: TYPE,
-            behavior: new SoundCloudAdapterBehaviour(AudioApi)
-          })
-        ]);
-      }, 100);
+  get adapters() {
+    return new Promise((resolve, reject) => {
+      resolve([]);
     });
   }
 }
