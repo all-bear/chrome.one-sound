@@ -9,4 +9,5 @@ Chrome extension which create a kind of a media chain, so exactly in one moment 
 - Yandex Music
 - VKONTAKTE
 - Sound Cloud
+- Google Music
 

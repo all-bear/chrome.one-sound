@@ -4,6 +4,8 @@ import {VkAudioAdapterRepository} from './vk/audio';
 import {VkVideoAdapterRepository} from './vk/video';
 import {YoutubeAdapterRepository} from './youtube';
 import {SoundCloudAdapterRepository} from './sound-cloud';
+import {GoogleMusicAdapterRepository} from './google-music';
+
 import {transport} from '../transport';
 
 class AdapterRepository {
@@ -14,7 +16,8 @@ class AdapterRepository {
       new VkAudioAdapterRepository(),
       new VkVideoAdapterRepository(),
       new YoutubeAdapterRepository(),
-      new SoundCloudAdapterRepository()
+      new SoundCloudAdapterRepository(),
+      new GoogleMusicAdapterRepository()
     ];
 
     this.repositoryAdapters = this.repositories.reduce((basket, repository) => {
