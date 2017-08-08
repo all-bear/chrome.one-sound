@@ -25,6 +25,10 @@ class GoogleMusicAdapterBehaviour extends Html5AdapterBehaviour {
     this.api = api;
   }
 
+  get isPlayed() {
+    return !this.isEndOfQueue && super.isPlayed;
+  }
+
   registerChangeListener(cb) {
     if (!this.changeInterval) {
       this.changeInterval = setInterval(() => {
@@ -35,6 +39,19 @@ class GoogleMusicAdapterBehaviour extends Html5AdapterBehaviour {
         this.prevLabel = this.label;
       }, 500);
     }
+
+    this.element.addEventListener('playing', () => {
+      this.isEndOfQueue = false;
+    });
+
+    this.element.addEventListener('pause', () => {
+      if (this.playButton.disabled !== null) { //end of queue
+        this.isEndOfQueue = true;
+        cb.call();
+      } else {
+        this.isEndOfQueue = false;
+      }
+    });
 
     super.registerChangeListener(cb);
   }
