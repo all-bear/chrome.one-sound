@@ -1,6 +1,9 @@
 import {transport} from './transport';
+import {Settings} from '../../bower_components/chrome-lib-settings/dist/js/settings'
+
 
 const ALIVE_ADAPTER_CHECK_TIMEOUT = 500;
+const NOTIFICATION_WILL_BE_PlAY = 'will-be-play';
 
 class Chain {
   constructor() {
@@ -74,16 +77,85 @@ class AdapterChain {
     this.transport.send('chain-changed', this.chain.chain, true);
   }
 
+  playLast() {
+    const playCb = () => {
+      this.play(this.chain.last);
+    };
+
+    Settings.load(settings => {
+      const timeout = parseInt(settings.willBePlayNotifyTimeout);
+
+      if (!timeout) {
+        return playCb.call();
+      }
+
+      this.notifyPrevAdapterWillPlay(this.chain.last, playCb, () => {
+        this.pauseChain();
+      }, timeout);
+    });
+  }
+
   remove(adapter) {
     if (this.chain.last.id === adapter.id) {
       this.chain.remove(adapter);
       if (this.chain.length && this.isPlayed) {
-        this.play(this.chain.last);
+        this.playLast();
       }
     } else {
       this.chain.remove(adapter);
     }
     this.triggerChainChange();
+  }
+
+  notifyPrevAdapterWillPlay(adapter, successCb, failCb, timeout) {
+    const id = NOTIFICATION_WILL_BE_PlAY + Date.now();
+    let processed = false;
+    
+    chrome.notifications.create(
+      id, {   
+            type: 'basic', 
+            iconUrl: 'images/notifications/icon.png' ,
+            title: chrome.i18n.getMessage('notifications_will_be_play_title'), 
+            message: chrome.i18n.getMessage('notifications_will_be_play_message').replace('%1', adapter.label),
+            buttons: [
+              { 
+                title: chrome.i18n.getMessage('notifications_will_be_play_cancel'),
+                iconUrl: 'images/notifications/will-be-play-pause.png'
+              }
+            ],
+            eventTime: timeout
+      });
+
+
+    chrome.notifications.onButtonClicked.addListener((notificationId) => {
+      if (notificationId !== id || processed) {
+        return;
+      }
+
+      chrome.notifications.clear(id);
+      processed = true;
+      failCb.call();
+    }); 
+
+    setTimeout(() => {
+      if (processed) {
+        return;
+      }
+
+      successCb.call();
+    }, timeout * 0.6); 
+
+    setTimeout(() => {
+      chrome.notifications.clear(id);
+    }, timeout); 
+  }
+
+  pauseChain() {
+    this.isPlayed = false;
+
+    if (this.chain.length) {
+      this.pause(this.chain.last);
+    }
   }
 
   init() {
@@ -112,7 +184,7 @@ class AdapterChain {
       if (this.chain.last.id === adapter.id) {
         this.chain.remove(adapter);
         if (this.chain.length) {
-          this.play(this.chain.last);
+          this.playLast();
         }
       } else {
         this.chain.remove(adapter);
@@ -127,11 +199,7 @@ class AdapterChain {
     });
 
     this.transport.on('pause-chain', () => {
-      this.isPlayed = false;
-
-      if (this.chain.length) {
-        this.pause(this.chain.last);
-      }
+      this.pauseChain();
     });
 
     this.transport.on('play-chain', () => {

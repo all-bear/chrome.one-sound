@@ -1,20 +1,30 @@
 section {
   overflow: hidden;
   padding: 7px 5px 5px;
+  display: flex;
+  flex-wrap: wrap;
 }
 section + section {
   border-top: 1px solid lightgray;
 }
 #save {
-  float: right;
+  margin-left: auto;
 }
 #messages {
   height: 10px;
 }
 .label {
-  float: left;
+  width: 70%;
 }
 .control {
-  float: right;
-  width: 160px;
+  width: 30%;
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0;
+}
+.comment {
+	display: block;
+	font-size: 11px;
+	font-style: italic;
+	margin-top: 3px;
 }

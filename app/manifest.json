@@ -42,7 +42,8 @@
     "tabs",
     "storage",
     "http://*/*",
-    "https://*/*"
+    "https://*/*",
+    "notifications"
   ],
   "options_ui": {
     "page": "templates/options.html",

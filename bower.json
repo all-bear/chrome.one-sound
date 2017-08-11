@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "chrome-lib-inline-i18n": "^0.1.1",
-    "chrome-lib-settings": "^0.1.0",
+    "chrome-lib-settings": "^0.1.1",
     "uniq-id": "^0.1.0",
     "chrome-lib-script-injection": "^0.2.0"
   }

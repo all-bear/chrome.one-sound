@@ -8,23 +8,26 @@
 </head>
 
 <body>
-<section>
-  <div id="messages"></div>
-</section>
-<section>
-  <div>
+<form>
+  <section>
+    <div id="messages"></div>
+  </section>
+  <section>
     <span class="label" data-translate="skin_option_label"></span>
-    <select id="skin" class="control">
+    <select name="skin" class="control">
       <option value="default" data-translate="skin_default_option_value"></option>
       <!--<option value="pinky" data-translate="skin_pinky_option_value"></option>-->
     </select>
-  </div>
-</section>
-<section>
-  <div>
+  </section>
+  <section>
+    <span class="label" data-translate="will_be_play_notify_option_label"></span>
+    <input type="number" min="0" max="8000" name="willBePlayNotifyTimeout" class="control"/>
+    <span class="comment" data-translate="will_be_play_notify_option_comment"></span>
+  </section>
+  <section>
     <button id="save" class="control" data-translate="options_save_button_label"></button>
-  </div>
-</section>
+  </section>
+</form>
 <!-- build:js /scripts/options.js -->
 <script src="/scripts/options.js"></script>
 <!-- endbuild --></body>

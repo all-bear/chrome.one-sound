@@ -27,6 +27,14 @@
     "message": "Skin",
     "description": "Label for skin (on options.html page)"
   },
+  "will_be_play_notify_option_label": {
+    "message": "Notification, when previous track ready to play visibility interval (in miliseconds)",
+    "description": "Label for will be play notify timeout (on options.html page)"
+  },
+  "will_be_play_notify_option_comment": {
+    "message": "leave it empty if you don't want to see this notification (changes will be applied after full restart)",
+    "description": "Label for will be play notify timeout (on options.html page)"
+  },
   "skin_default_option_value": {
     "message": "default",
     "description": "Value for default skin value (on options.html page)"
@@ -42,5 +50,17 @@
   "options_saved": {
     "message": "Options saved.",
     "description": "Message appears when extension options are saved (on options.html page)"
+  },
+  "notifications_will_be_play_title": {
+    "message": "One Sound",
+    "description": "Title for `will be play now` notification"
+  },
+  "notifications_will_be_play_message": {
+    "message": "%1 will be play in a few seconds",
+    "description": "Message for `will be play now` notification"
+  },
+  "notifications_will_be_play_cancel": {
+    "message": "PAUSE CHAIN",
+    "description": "Title for pause button on `will be play now` notification"
   }
 }
