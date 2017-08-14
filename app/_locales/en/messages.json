@@ -32,7 +32,7 @@
     "description": "Label for will be play notify timeout (on options.html page)"
   },
   "will_be_play_notify_option_comment": {
-    "message": "leave it empty if you don't want to see this notification (changes will be applied after full restart)",
+    "message": "leave it empty if you don't want to see this notification",
     "description": "Label for will be play notify timeout (on options.html page)"
   },
   "skin_default_option_value": {
