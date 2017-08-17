@@ -4,6 +4,7 @@ import {Settings} from '../../bower_components/chrome-lib-settings/dist/js/setti
 
 const ALIVE_ADAPTER_CHECK_TIMEOUT = 500;
 const NOTIFICATION_WILL_BE_PlAY = 'will-be-play';
+const TIMEOUT_BEFORE_NOTIFICATION_WILL_BE_PlAY = 800;
 
 class Chain {
   constructor() {
@@ -82,17 +83,27 @@ class AdapterChain {
       this.play(this.chain.last);
     };
 
-    Settings.load(settings => {
-      const timeout = parseInt(settings.willBePlayNotifyTimeout);
+    const lastId = this.chain.last.id;
 
-      if (!timeout) {
-        return playCb.call();
+    setTimeout(() => {
+      const isLastChanged = (lastId !== this.chain.last.id);
+
+      if (isLastChanged) {
+        return;
       }
 
-      this.notifyPrevAdapterWillPlay(this.chain.last, playCb, () => {
-        this.pauseChain();
-      }, timeout);
-    });
+      Settings.load(settings => {
+        const timeout = parseInt(settings.willBePlayNotifyTimeout);
+
+        if (!timeout) {
+          return playCb.call();
+        }
+
+        this.notifyPrevAdapterWillPlay(this.chain.last, playCb, () => {
+          this.pauseChain();
+        }, timeout);
+      });
+    }, TIMEOUT_BEFORE_NOTIFICATION_WILL_BE_PlAY);
   }
 
   remove(adapter) {
