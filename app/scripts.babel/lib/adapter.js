@@ -43,6 +43,30 @@ export class Adapter {
     return this.ignoredAdapters.find(adapter => adapter.id === this.id);
   }
 
+  onChange() {
+    this.changeListenerBounceTimeout = setTimeout(() => {
+      clearTimeout(this.changeListenerBounceTimeout);
+
+      if (this.destroed || this.isIgnored) {
+        return;
+      }
+
+      if (this.behavior.isPlayed != this.state.isPlayed) {
+        this.transport.send(
+          this.behavior.isPlayed ? 'add-adapter' : 'remove-adapter',
+          this
+        );
+      } else {
+        this.transport.send(
+          'update-adapter',
+          this
+        )
+      }
+
+      this.updateState();
+    }, CHANGE_LISTENTER_BOUNCE_TIMEOUT_VALUE);
+  }
+
   register() {
     if (this.destroed) {
       return;
@@ -53,27 +77,7 @@ export class Adapter {
     }
 
     this.behavior.registerChangeListener(() => {
-      this.changeListenerBounceTimeout = setTimeout(() => {
-        clearTimeout(this.changeListenerBounceTimeout);
-
-        if (this.destroed || this.isIgnored) {
-          return;
-        }
-
-        if (this.behavior.isPlayed != this.state.isPlayed) {
-          this.transport.send(
-            this.behavior.isPlayed ? 'add-adapter' : 'remove-adapter',
-            this
-          );
-        } else {
-          this.transport.send(
-            'update-adapter',
-            this
-          )
-        }
-
-        this.updateState();
-      }, CHANGE_LISTENTER_BOUNCE_TIMEOUT_VALUE);
+      this.onChange();
     });
 
     this.transport.on('play-adapter', adapter => {
